@@ -49,15 +49,14 @@ Sources: [Floci docs](https://floci.io/floci/), [Terraform with Floci](https://f
 
 ```
 Laptop (Windows) ──ssh──▶  server "coz" (Debian 13, x86_64, Docker Engine)
-                             ├── ~/cloud-infra-learning   ← this repo (docs + our own config)
-                             ├── ~/fem-fd-service         ← course code (separate clone)
+                             ├── ~/cloud-infra-learning   ← this repo: course code at the root + docs/
                              └── Floci container          ← fake AWS on :4566
 ```
 
 ## Decisions
 
 - **Floci instead of real AWS.** No cloud bill and no account needed.
-- **The course code stays out of this repo.** fem-fd-service's README says it is proprietary, and this repo is public. We clone it separately. This repo holds notes and our own changes, such as Terraform/Floci overrides.
+- **The course code lives in this repo, at the root.** It was copied unchanged from `stage-01-start-up`, so the course's commands work as is. Each later stage is added as our own commits (see [03](03-course-code.md)).
 - **Stage 01 has no App Runner.** We run the pushed image with ECS or Docker instead.
 - **Google OAuth still needs the real Google Cloud.** Floci only covers AWS.
 - **Nothing already on the server gets changed.** It's shared with other apps, so the course moves to free ports (app on `8090`, ALB on `8081`) instead. See [02: Prerequisites](02-prerequisites.md#ports).

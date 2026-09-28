@@ -49,7 +49,7 @@ Checked on 2026-09-28 (Debian 13 "trixie", x86_64, 8 cores, 30 GB RAM):
 
 The user is in the `docker` group, so Docker works without `sudo`.
 
-Install steps go in `03-install-tools.md`.
+Install steps go in `04-install-tools.md`.
 
 ## Tools on the laptop
 
@@ -84,9 +84,9 @@ This keeps the Google redirect URI at `http://localhost:8080/auth/google/callbac
 The server runs other apps, so some course commands need care:
 
 - **Never run `docker system prune --all`.** The course's troubleshooting tips suggest it, but it deletes every unused image on the server, including ones other apps need in order to restart. Remove course images by name instead, e.g. `docker image rm <image>`.
-- `make down` runs `docker compose down --volumes`. That is scoped to the compose project in the current folder, so it's safe, but only run it from inside `fem-fd-service`.
+- `make down` runs `docker compose down --volumes`. That is scoped to the compose project in the current folder, so it's safe, but only run it from inside `~/cloud-infra-learning`.
 - Floci starts containers through the Docker socket (ECS tasks, RDS, EC2). Watch them with `docker ps`, and clean up with `terraform destroy` or Floci itself, not by bulk-deleting containers.
 
 ## Next
 
-03: Install tools (goose, AWS CLI, Terraform), then 04: Floci setup.
+[03: Course code](03-course-code.md), then 04: Install tools (goose, AWS CLI, Terraform), then 05: Floci setup.

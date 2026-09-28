@@ -13,11 +13,12 @@ Each file covers one step, in the order it happened.
 | 00 | [Overview](00-overview.md): the course, its stages, and the Floci swap | Done |
 | 01 | [Repo and git setup](01-repo-and-git-setup.md): this repo, and pushing from the server | Done |
 | 02 | [Prerequisites](02-prerequisites.md): accounts, tools, ports | In progress |
-| 03 | Install tools | Planned |
-| 04 | Floci setup | Planned |
-| 05 | Stage 01: start-up (container, ECR, Parameter Store, run the app) | Planned |
-| 06 | Stage 02: growth (makefile, migrations, CI) | Planned |
-| 07 | Stage 03: scale (Terraform: VPC, RDS, ECS, ALB, CloudFront) | Planned |
+| 03 | [Course code](03-course-code.md): stage-01 code imported into this repo | Done |
+| 04 | Install tools | Planned |
+| 05 | Floci setup | Planned |
+| 06 | Stage 01: start-up (container, ECR, Parameter Store, run the app) | Planned |
+| 07 | Stage 02: growth (makefile, migrations, CI) | Planned |
+| 08 | Stage 03: scale (Terraform: VPC, RDS, ECS, ALB, CloudFront) | Planned |
 
 ## Template for each file
 
