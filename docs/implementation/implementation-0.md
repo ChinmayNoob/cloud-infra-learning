@@ -11,10 +11,10 @@ Run the `goals` app on the server with a real Postgres database, and log in with
 | 1 | Google OAuth client created (redirect URI `http://localhost:8080/auth/google/callback`) | ✅ Done |
 | 2 | `.env` filled in on the server (git-ignored) | ✅ Done and checked |
 | 3 | Postgres running (`docker compose up -d`) | ✅ Running, Postgres 17.11 on `:5432` |
-| 4 | Create the database tables (SQL from the README) | ⬜ Next |
-| 5 | Build the app's Docker image | ⬜ |
-| 6 | Run the app container on host port **8090** | ⬜ |
-| 7 | SSH tunnel from the laptop, then log in at `http://localhost:8080` | ⬜ |
+| 4 | Create the database tables (SQL from the README) | ✅ 6 tables |
+| 5 | Build the app's Docker image | ✅ `goals:stage-01` |
+| 6 | Run the app container on host port **8090** | ✅ Running, connected to the DB |
+| 7 | SSH tunnel from the laptop, then log in at `http://localhost:8080` | ⬜ Next (you do this) |
 | 8 | Make yourself admin (`INSERT INTO administrators …`) | ⬜ |
 
 ## What we did
@@ -55,32 +55,61 @@ docker compose exec postgres pg_isready -U postgres
 # /var/run/postgresql:5432 - accepting connections
 ```
 
-## Plan for the remaining steps
+### 4. Created the tables
 
-### 4. Create the tables
-
-Run the `CREATE TABLE` statements from the course README through `psql` in the Postgres container. The tables are `users`, `administrators`, `aspiration_updates`, `likes`, `followers` and `comments`.
+We took the first `sql` block from the course README (six `CREATE TABLE` statements) and ran it with `psql` inside the Postgres container:
 
 ```bash
-docker compose exec -T postgres psql -U postgres -d postgres < schema.sql
+awk '/^```sql/{f++; next} /^```/{if(f==1) exit} f==1' README.md > /tmp/goals-schema.sql
+docker compose exec -T postgres psql -v ON_ERROR_STOP=1 -U postgres -d postgres < /tmp/goals-schema.sql
+docker compose exec -T postgres psql -U postgres -d postgres -c '\dt'
 ```
 
-### 5–6. Build and run the app in Docker (not `go run`)
+The result is 6 tables: `administrators`, `aspiration_updates`, `comments`, `followers`, `likes` and `users`.
 
-The app hardcodes port `:8080`, and the server's 8080 belongs to another service, which we don't touch. So the app runs in a container, and we map it to a free port:
+Stage 02 replaces this manual step with goose migrations.
+
+### 5. Built the image
 
 ```bash
 docker build -t goals:stage-01 .
-docker run -d --name goals \
+```
+
+The image is **553 MB**, because stage 01's Dockerfile is single-stage: the whole Go toolchain ships with the app. Stage 02 switches to a multi-stage build to shrink it.
+
+### 6. Ran the app in Docker (not `go run`)
+
+The app hardcodes port `:8080`, and the server's 8080 belongs to another service, which we don't touch. So the app runs in a container, mapped to a free port:
+
+```bash
+docker run -d --name goals --restart unless-stopped \
   --env-file .env \
-  -e POSTGRES_URL=postgresql://postgres:password@host.docker.internal:5432/postgres?sslmode=disable \
+  -e "POSTGRES_URL=postgresql://postgres:password@host.docker.internal:5432/postgres?sslmode=disable" \
   --add-host host.docker.internal:host-gateway \
   -p 127.0.0.1:8090:8080 \
   goals:stage-01
 ```
 
-- `-p 127.0.0.1:8090:8080` publishes the app on the server's port 8090, only on the server itself (it's reached through the tunnel).
-- Inside the container, `localhost` is the container itself, so `POSTGRES_URL` is overridden to point at the server (`host.docker.internal`).
+| Flag | Why |
+|------|-----|
+| `--env-file .env` | Loads the Google values. This needs lines with no `export` prefix. |
+| `-e POSTGRES_URL=…host.docker.internal…` | Inside the container, `localhost` means the container itself. This points it at the server's Postgres instead. |
+| `--add-host host.docker.internal:host-gateway` | On Linux, this name isn't set up by default. The flag maps it to the server. |
+| `-p 127.0.0.1:8090:8080` | Server port 8090 → container port 8080, published only on the server itself (reached through the tunnel). |
+| `--restart unless-stopped` | Comes back up after a server reboot. |
+
+Result:
+
+```
+$ docker logs goals
+Successfully connected to the database
+Server starting on http://localhost:8080
+
+$ curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8090/
+200
+$ curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8090/auth/google/login
+307   → accounts.google.com, redirect_uri=http://localhost:8080/auth/google/callback
+```
 
 ### 7. Log in from the laptop
 
