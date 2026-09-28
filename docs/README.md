@@ -4,6 +4,8 @@ Notes from working through **[Fullstack Deployment: From Containers to Productio
 
 Instead of a real AWS account, everything runs against **[Floci](https://floci.io/)**, a local AWS emulator hosted on a home server.
 
+**Current state:** see the [Services overview](services-overview.md) for what's running and the role each piece plays.
+
 ## Setup
 
 Each file covers one step, in the order it happened.
