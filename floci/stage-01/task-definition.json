@@ -1,0 +1,32 @@
+{
+  "family": "fem-fd-service",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::000000000000:role/fem-fd-service-execution",
+  "containerDefinitions": [
+    {
+      "name": "goals",
+      "image": "localhost:4566/000000000000/us-west-2/fem-fd-service-preview:stage-01",
+      "essential": true,
+      "portMappings": [{ "containerPort": 8080, "protocol": "tcp" }],
+      "environment": [
+        { "name": "GOOGLE_REDIRECT_URL", "value": "http://localhost:8080/auth/google/callback" }
+      ],
+      "secrets": [
+        { "name": "GOOGLE_CLIENT_ID",     "valueFrom": "arn:aws:ssm:us-west-2:000000000000:parameter/fem-fd-service/google-client-id" },
+        { "name": "GOOGLE_CLIENT_SECRET", "valueFrom": "arn:aws:ssm:us-west-2:000000000000:parameter/fem-fd-service/google-client-secret" },
+        { "name": "POSTGRES_URL",         "valueFrom": "arn:aws:ssm:us-west-2:000000000000:parameter/fem-fd-service/postgres-url" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/fem-fd-service",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "goals"
+        }
+      }
+    }
+  ]
+}
