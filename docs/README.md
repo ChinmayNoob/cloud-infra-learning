@@ -6,6 +6,8 @@ Instead of a real AWS account, everything runs against **[Floci](https://floci.i
 
 **Current state:** see the [Services overview](services-overview.md) for what's running and the role each piece plays.
 
+**Day to day:** the [Runbook](runbook.md) covers checking status, shutting down, starting up, opening the app and troubleshooting.
+
 ## Setup
 
 Each file covers one step, in the order it happened.
