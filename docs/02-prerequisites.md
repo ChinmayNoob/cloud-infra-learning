@@ -40,16 +40,14 @@ Checked on 2026-09-28 (Debian 13 "trixie", x86_64, 8 cores, 30 GB RAM):
 | git | Everything | ✅ 2.47.3 |
 | jq | `deploy.sh` | ✅ 1.7 |
 | curl | Installs | ✅ |
-| **goose** | DB migrations | ❌ Missing |
-| **AWS CLI v2** | Talking to Floci | ❌ Missing |
-| **Terraform** | Stage 03 | ❌ Missing |
-| **unzip** | AWS CLI installer | ❌ Missing |
-| psql (client) | Poking at the DB (optional) | ❌ Missing |
-| Floci | Fake AWS | ❌ Not running yet (see 04) |
+| **goose** | DB migrations | ✅ v3.28.0 (installed in [implementation 1](implementation/implementation-1.md)) |
+| **AWS CLI v2** | Talking to Floci | ✅ 2.37.4 (implementation 1) |
+| **Terraform** | Stage 03 | ✅ v1.16.4 (implementation 1) |
+| unzip | AWS CLI installer | Not needed. `busybox unzip` is used instead. |
+| psql (client) | Poking at the DB (optional) | Not needed. `psql` runs inside the Postgres container. |
+| Floci | Fake AWS | ✅ Running (implementation 1) |
 
 The user is in the `docker` group, so Docker works without `sudo`.
-
-Install steps go in `04-install-tools.md`.
 
 ## Tools on the laptop
 
@@ -89,4 +87,4 @@ The server runs other apps, so some course commands need care:
 
 ## Next
 
-[03: Course code](03-course-code.md), then 04: Install tools (goose, AWS CLI, Terraform), then 05: Floci setup.
+[03: Course code](03-course-code.md), then the [implementation log](README.md#implementation-log).
