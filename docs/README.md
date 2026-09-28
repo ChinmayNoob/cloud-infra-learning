@@ -25,8 +25,8 @@ The build work goes in [`implementation/`](implementation/), one file per step, 
 |---|------|--------|
 | 0 | [Stage 01: run the app locally](implementation/implementation-0.md) (Postgres, tables, app container, Google login) | Done |
 | 1 | [Tools and Floci](implementation/implementation-1.md) (AWS CLI, goose, Terraform, Floci) | Done |
-| 2 | Stage 01 on Floci: ECR push, SSM Parameter Store, run the image | Next |
-| 3 | Stage 02: makefile, goose migrations, CI | Planned |
+| 2 | [Stage 01 on Floci](implementation/implementation-2.md) (ECR, SSM Parameter Store, IAM, ECS, CloudWatch Logs) | Done (login check pending) |
+| 3 | Stage 02: makefile, goose migrations, CI | Next |
 | 4 | Stage 03: Terraform (VPC, RDS, ECS, ALB, CloudFront) | Planned |
 
 ## Template for each file
