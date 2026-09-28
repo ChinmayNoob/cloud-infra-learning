@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_PASSWORD: password 
+    network_mode: host
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+volumes:
+  postgres:
