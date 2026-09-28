@@ -14,8 +14,10 @@ Run the `goals` app on the server with a real Postgres database, and log in with
 | 4 | Create the database tables (SQL from the README) | ✅ 6 tables |
 | 5 | Build the app's Docker image | ✅ `goals:stage-01` |
 | 6 | Run the app container on host port **8090** | ✅ Running, connected to the DB |
-| 7 | SSH tunnel from the laptop, then log in at `http://localhost:8080` | ⬜ Next (you do this) |
-| 8 | Make yourself admin (`INSERT INTO administrators …`) | ⬜ |
+| 7 | SSH tunnel from the laptop, then log in at `http://localhost:8080` | ✅ Logged in, profile saved |
+| 8 | Make yourself admin (`INSERT INTO administrators …`) | ✅ Done |
+
+**The local half of stage 01 is complete.**
 
 ## What we did
 
@@ -122,12 +124,35 @@ ssh -L 8080:localhost:8090 coz@coz
 laptop browser → localhost:8080 ──tunnel──▶ server :8090 → container :8080 → app
 ```
 
-### 8. Make yourself admin
+Result: Google login worked on the first try. The first login creates a row in `users`, and the profile form fills in the rest:
 
-```sql
-INSERT INTO administrators (email, username)
-SELECT email, username FROM users WHERE email = '<your gmail>';
 ```
+ id | username | email          | is_banned
+----+----------+----------------+-----------
+  1 | chinmay  | <our gmail>    | f
+```
+
+### 8. Made ourselves admin
+
+```bash
+docker compose exec -T postgres psql -U postgres -d postgres -v email='<your gmail>' <<'SQL'
+INSERT INTO administrators (email, username)
+SELECT email, username FROM users WHERE email = :'email'
+ON CONFLICT DO NOTHING;
+SQL
+```
+
+`administrators` now has one row, which gives our account the admin (ban) features.
+
+### Handy checks
+
+```bash
+docker logs goals --tail 20                                   # app log
+docker compose exec postgres psql -U postgres -d postgres     # SQL shell
+docker restart goals                                          # after changing .env
+```
+
+To pick up code changes, rebuild and re-run: `docker build -t goals:stage-01 .`, then `docker rm -f goals`, then the `docker run` command from step 6.
 
 ## Next
 
