@@ -4,7 +4,7 @@ Notes from working through **[Fullstack Deployment: From Containers to Productio
 
 Instead of a real AWS account, everything runs against **[Floci](https://floci.io/)**, a local AWS emulator hosted on a home server.
 
-## Files
+## Setup
 
 Each file covers one step, in the order it happened.
 
@@ -14,11 +14,18 @@ Each file covers one step, in the order it happened.
 | 01 | [Repo and git setup](01-repo-and-git-setup.md): this repo, and pushing from the server | Done |
 | 02 | [Prerequisites](02-prerequisites.md): accounts, tools, ports | In progress |
 | 03 | [Course code](03-course-code.md): stage-01 code imported into this repo | Done |
-| 04 | Install tools | Planned |
-| 05 | Floci setup | Planned |
-| 06 | Stage 01: start-up (container, ECR, Parameter Store, run the app) | Planned |
-| 07 | Stage 02: growth (makefile, migrations, CI) | Planned |
-| 08 | Stage 03: scale (Terraform: VPC, RDS, ECS, ALB, CloudFront) | Planned |
+
+## Implementation log
+
+The build work goes in [`implementation/`](implementation/), one file per step, starting at `implementation-0`.
+
+| # | File | Status |
+|---|------|--------|
+| 0 | [Stage 01: run the app locally](implementation/implementation-0.md) (Postgres, tables, app container, Google login) | In progress |
+| 1 | Tools (AWS CLI, goose, Terraform) and Floci | Planned |
+| 2 | Stage 01 on Floci: ECR push, SSM Parameter Store, run the image | Planned |
+| 3 | Stage 02: makefile, goose migrations, CI | Planned |
+| 4 | Stage 03: Terraform (VPC, RDS, ECS, ALB, CloudFront) | Planned |
 
 ## Template for each file
 

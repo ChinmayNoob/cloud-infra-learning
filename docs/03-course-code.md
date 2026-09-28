@@ -48,4 +48,4 @@ Then we apply the changes and add our Floci tweaks in separate commits, so it's 
 
 ## Next
 
-Install the missing tools (goose, AWS CLI, Terraform), then set up Floci.
+[Implementation 0: Stage 01, run the app locally](implementation/implementation-0.md)
